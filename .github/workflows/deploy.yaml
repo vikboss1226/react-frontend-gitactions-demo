@@ -22,7 +22,7 @@ jobs:
       - name: Run Test Cases 
         run: npm run test
 
-    build-job:
+  build-job:
       needs: test-job
       runs-on: ubuntu-latest
 
@@ -44,17 +44,17 @@ jobs:
           name: my-artifact
           path: build/ # or path/to/artifact
 
-      deploy-job:
-          needs: deploy-job 
-          steps:
+  deploy-job:
+     needs: deploy-job 
+     steps:
             - name: Download Artifact
               uses: actions/download-artifact@v5
               with:
                 name: my-artifact
                 path: build
             - name: Display structure of downloaded files
-              run: ls -R build
-            
+              run: ls -R build      
+               
 
 
 
