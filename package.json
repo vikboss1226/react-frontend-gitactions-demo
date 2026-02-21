@@ -1,7 +1,7 @@
 {
   "name": "frontend",
   "version": "0.1.0",
-  "homepage": "https://vikboss1226.github.io/react-frontend-gitactions-demo",
+  "homepage": "https://vikboss1226.github.io/react-frontend-gitactions-demo/",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
