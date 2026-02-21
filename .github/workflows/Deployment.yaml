@@ -1,0 +1,27 @@
+name: React App Deployment 
+run-name: ${{ github.actor }} React Deployment🚀
+on: 
+  push: 
+    branches: 
+      - main 
+jobs: 
+  test-job: 
+    runs-on: ubuntu-latest 
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Tests
+        run: npm test -- --watchAll=false
+
+      - name: Build Project
+        run: npm run build
