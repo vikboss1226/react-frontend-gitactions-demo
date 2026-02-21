@@ -8,6 +8,7 @@ jobs:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }}"
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
   Complete-Job: 
+    needs: Explore-Git-Hub-Actions
     runs-on: ubuntu-latest 
     steps: 
       - name: step 1 
