@@ -34,6 +34,17 @@ jobs:
       - run: npm install
       - run: npm run build
 
+      - name: Show build folder structure
+        run: |
+          echo "Root directory:"
+          ls -la
+
+          echo "Inside build folder:"
+          ls -la build
+
+          echo "Recursive view:"
+          ls -R build
+
    
       - name: Upload Build Folder Artifact
         uses: actions/upload-artifact@v4
