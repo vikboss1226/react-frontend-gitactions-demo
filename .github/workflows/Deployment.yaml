@@ -46,6 +46,9 @@ jobs:
       - name: Build App
         run: npm run build
 
+      - name: Check Build Folder
+        run: ls -la
+
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
