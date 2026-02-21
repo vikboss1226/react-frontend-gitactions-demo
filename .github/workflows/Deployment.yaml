@@ -8,18 +8,23 @@ jobs:
   test-job: 
     runs-on: ubuntu-latest 
     steps:
-    - uses: actions/checkout@v5
+    - name: Checkout
+      uses: actions/checkout@v5
+     
     - name: Install Node JS
-    - uses: actions/setup-node@v4
+      uses: actions/setup-node@v4
       with:
         node-version: '20'
         cache: 'npm'
     - name: Install Dependencies
       run : npm install 
+
     - name: Run Test Files 
       run : npm run test 
+
     - name: Build the App 
       run: npm run build 
+
     - name: Complete Job 
       run: echo "Build Successful!"
  
