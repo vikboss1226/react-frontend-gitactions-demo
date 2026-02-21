@@ -7,49 +7,59 @@ on:
       - main
 
 jobs:
-  test-and-build:
+  test-job:
     runs-on: ubuntu-latest
     steps:
-      # Checkout the code
       - uses: actions/checkout@v4
 
-      # Setup Node.js with npm caching
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
 
-      # Install dependencies using npm ci (requires package-lock.json)
+      - name: Install Dependencies
+        run: npm ci 
+
+      - name: Perform NPM Test 
+        run: npm test -- --watchAll=false
+
+  build-job:
+    needs: test-job
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
       - name: Install Dependencies
         run: npm ci
 
-      # Run tests
-      - name: Run Tests
-        run: npm test -- --watchAll=false
-
-      # Build React app
-      - name: Build React App
+      - name: Perform NPM Build 
         run: npm run build
 
-      # Show build folder structure (optional debugging)
-      - name: Show Build Folder Structure
+      - name: Show build folder structure
         run: |
           echo "Root directory:"
           ls -la
+
           echo "Inside build folder:"
           ls -la build
+
           echo "Recursive view:"
           ls -R build
 
-      # Upload build artifact for deploy job
-      - name: Upload Build Artifact
+   
+      - name: Upload Build Folder Artifact
         uses: actions/upload-artifact@v4
         with:
           name: react-build
           path: build/
 
-  deploy:
-    needs: test-and-build
+  deploy-job:
+    needs: build-job
     runs-on: ubuntu-latest
 
     permissions:
@@ -59,26 +69,23 @@ jobs:
 
     environment:
       name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      # Download the build artifact
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
           name: react-build
           path: build
 
-      # Setup GitHub Pages
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
-      # Upload build folder to GitHub Pages
       - name: Upload to GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
           path: build
 
-      # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
