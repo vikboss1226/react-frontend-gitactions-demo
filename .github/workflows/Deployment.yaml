@@ -5,7 +5,7 @@ on:
     branches: 
       - main 
 jobs: 
-  React-App-Build: 
+  Test-Job: 
     runs-on: ubuntu-latest 
     steps:
     - name: Checkout
@@ -16,15 +16,24 @@ jobs:
       with:
         node-version: '20'
         cache: 'npm'
-    - name: Install Dependencies
-      run : npm install 
-
-    - name: Run Test Files 
+    - name: Perform Test Cases
       run : npm run test 
 
-    - name: Build the App 
-      run: npm run build 
+  Build-Job:
+     needs: Test-Job
+     runs-on: ubuntu-latest 
+     steps:
+        - name: Checkout
+          uses: actions/checkout@v5
 
-    - name: Complete Job 
-      run: echo "Build Successful!"
- 
+        - name: Install Node JS
+          uses: actions/setup-node@v4
+          with:
+            node-version: '20'
+            cache: 'npm'
+
+        - name: Perform Build Action 
+          run: npm run build 
+
+        
+      
