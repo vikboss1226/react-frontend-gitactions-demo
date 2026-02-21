@@ -34,11 +34,24 @@ jobs:
       - run: npm install
       - run: npm run build
 
-      - name: Upload Build Artifact
+      
+      # ✅ Create real ZIP file
+      - name: Create ZIP
+        run: zip -r react-build.zip build
+
+      # ✅ Upload ZIP artifact
+      - name: Upload ZIP Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: react-build.zip
+          path: react-build.zip
+
+      # ✅ Upload normal build folder for deployment
+      - name: Upload Build Folder Artifact
         uses: actions/upload-artifact@v4
         with:
           name: react-build
-          path: build/   # use dist/ if Vite
+          path: build/
 
   deploy-job:
     needs: build-job
