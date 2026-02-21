@@ -16,6 +16,10 @@ jobs:
       with:
         node-version: '20'
         cache: 'npm'
+
+    - name : Install Dependencies 
+      run : npm install 
+
     - name: Perform Test Cases
       run : npm run test 
 
@@ -31,6 +35,8 @@ jobs:
           with:
             node-version: '20'
             cache: 'npm'
+        - name: Install Dependencies 
+          run : npm install
 
         - name: Perform Build Action 
           run: npm run build 
