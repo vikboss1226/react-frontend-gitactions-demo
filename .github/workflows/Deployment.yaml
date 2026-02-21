@@ -30,7 +30,7 @@ jobs:
 
       - name: Install Dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
-        run: npm Install
+        run: npm install
 
       - name: Perform Test Cases
         run: npm test -- --watchAll=false
@@ -59,10 +59,7 @@ jobs:
 
       - name: Install Dependencies
         if: steps.cache-node.outputs.cache-hit != 'true'
-        run: npm Install
-
-      - name: Install Dependencies
-        run: npm Install
+        run: npm install 
 
       - name: Perform Build Action
         run: npm run build
