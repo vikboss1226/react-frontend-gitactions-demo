@@ -47,5 +47,31 @@ jobs:
         - name: Perform Build Action 
           run: npm run build 
 
+  Deploy-Job: 
+    needs: Build-Job
+    runs-on: ubuntu-latest 
+    steps: 
+    - name: Checkout
+      uses: actions/checkout@v5
+     
+    - name: Install Node JS
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Cache NPM dependencies
+      uses: actions/cache@v4
+      with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+
+    - name : Install Dependencies 
+      run : npm install 
+    
+    - name: Deploy App 
+      run : echo "deploying react app"
+
+
         
       
