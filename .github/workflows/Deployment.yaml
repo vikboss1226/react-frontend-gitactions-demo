@@ -1,77 +1,58 @@
-name: React App Deployment 
-run-name: ${{ github.actor }} React Deployment🚀
-on: 
-  push: 
-    branches: 
-      - main 
-jobs: 
-  Test-Job: 
-    runs-on: ubuntu-latest 
+name: React App Deployment
+run-name: ${{ github.actor }} React Deployment 🚀
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-job:
+    runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v5
-     
-    - name: Install Node JS
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: 'npm'
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Cache NPM dependencies
-      uses: actions/cache@v4
-      with:
-          path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
 
-    - name : Install Dependencies 
-      run : npm install 
+      - name: Install Dependencies
+        run: npm ci
 
-    - name: Perform Test Cases
-      run : npm run test 
+      - name: Perform Test Cases
+        run: npm test -- --watchAll=false
 
-  Build-Job:
-     needs: Test-Job
-     runs-on: ubuntu-latest 
-     steps:
-        - name: Checkout
-          uses: actions/checkout@v5
+  build-job:
+    needs: test-job
+    runs-on: ubuntu-latest
 
-        - name: Install Node JS
-          uses: actions/setup-node@v4
-          with:
-            node-version: '20'
-            cache: 'npm'
-        - name: Install Dependencies 
-          run : npm install
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-        - name: Perform Build Action 
-          run: npm run build 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
 
-  Deploy-Job: 
-    needs: Build-Job
-    runs-on: ubuntu-latest 
-    steps: 
-    - name: Checkout
-      uses: actions/checkout@v5
-     
-    - name: Install Node JS
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: 'npm'
+      - name: Install Dependencies
+        run: npm ci
 
-    - name: Cache NPM dependencies
-      uses: actions/cache@v4
-      with:
-          path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+      - name: Perform Build Action
+        run: npm run build
 
-    - name : Install Dependencies 
-      run : npm install 
-    
-    - name: Deploy App 
-      run : echo "deploying react app"
+  deploy-job:
+    needs: build-job
+    runs-on: ubuntu-latest
 
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-        
-      
+      - name: Deploy App
+        run: echo "Deploying React app..."
